@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "447948738768",
+    "project_id": "project-novella-app",
+    "storage_bucket": "project-novella-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447948738768:android:37bec5f70c8d5673e48ed5",
+        "android_client_info": {
+          "package_name": "com.example.novella_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh0TdZGxoz2tMDhC4ZvzSTi62Krjp7w4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447948738768:android:4d8c4932ae0587ebe48ed5",
+        "android_client_info": {
+          "package_name": "com.example.project_novella"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh0TdZGxoz2tMDhC4ZvzSTi62Krjp7w4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
