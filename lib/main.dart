@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:novella_app/component/book_detail.dart';
 import 'package:novella_app/firebase_options.dart';
 import 'package:novella_app/pages/home/home_page.dart';
+import 'package:novella_app/pages/home/novel_detail_page.dart';
+import 'package:novella_app/pages/home/novel_reader_page.dart';
 import 'package:novella_app/pages/library/library_page.dart';
 import 'package:novella_app/pages/master_page.dart';
 import 'package:novella_app/pages/notification/notification_page.dart';
-import 'package:novella_app/pages/home/novel_detail_page.dart';
-import 'package:novella_app/pages/home/novel_reader_page.dart';
 import 'package:novella_app/pages/search/search_page.dart';
 import 'package:novella_app/pages/writing/writing_or_upload.dart';
 import 'package:novella_app/routing_tpl.dart';
@@ -61,7 +61,7 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: '/reader',
+          path: Routes.reader,
           builder: (context, state) {
             final pdfPath = state.extra as String;
             return NovelReaderPage(pdfPath: pdfPath);
