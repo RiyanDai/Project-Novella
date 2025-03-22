@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/novel.dart';
-import '../services/database_helper.dart';
-import 'novel_editor_page.dart';
+import '../../models/novel.dart';
+import '../../services/database_helper.dart';
+import '../home/novel_editor_page.dart';
 
 class WritingPage extends StatefulWidget {
   const WritingPage({super.key});

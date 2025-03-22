@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/novel.dart';
-import '../models/chapter.dart';
-import '../services/database_helper.dart';
-import 'chapter_editor_page.dart';
+import '../../models/novel.dart';
+import '../../models/chapter.dart';
+import '../../services/database_helper.dart';
+import '../writing/chapter_editor_page.dart';
 import 'package:share_plus/share_plus.dart';
-import '../services/pdf_service.dart';
+import '../../services/pdf_service.dart';
 
 class NovelEditorPage extends StatefulWidget {
   final Novel novel;

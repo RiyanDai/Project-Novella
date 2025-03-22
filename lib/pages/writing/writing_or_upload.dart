@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:novella_app/pages/upload.dart';
-import 'package:novella_app/pages/writing_page.dart';
+import 'package:novella_app/pages/writing/upload.dart';
+import 'package:novella_app/pages/writing/writing_page.dart';
 
 class WritingOrUpload extends StatelessWidget {
   const WritingOrUpload({super.key});
