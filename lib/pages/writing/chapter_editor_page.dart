@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/chapter.dart';
-import '../services/database_helper.dart';
+import '../../models/chapter.dart';
+import '../../services/database_helper.dart';
 
 class ChapterEditorPage extends StatefulWidget {
   final Chapter chapter;

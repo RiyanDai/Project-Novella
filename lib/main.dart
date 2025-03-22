@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:novella_app/component/book_detail.dart';
 import 'package:novella_app/firebase_options.dart';
-import 'package:novella_app/pages/home_page.dart';
-import 'package:novella_app/pages/library_page.dart';
+import 'package:novella_app/pages/home/home_page.dart';
+import 'package:novella_app/pages/library/library_page.dart';
 import 'package:novella_app/pages/master_page.dart';
-import 'package:novella_app/pages/notification_page.dart';
-import 'package:novella_app/pages/search_page.dart';
-import 'package:novella_app/pages/writing_or_upload.dart';
+import 'package:novella_app/pages/notification/notification_page.dart';
+import 'package:novella_app/pages/home/novel_detail_page.dart';
+import 'package:novella_app/pages/home/novel_reader_page.dart';
+import 'package:novella_app/pages/search/search_page.dart';
+import 'package:novella_app/pages/writing/writing_or_upload.dart';
 import 'package:novella_app/routing_tpl.dart';
 
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
@@ -49,6 +52,20 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: Routes.notification,
           builder: (context, state) => const NotificationPage(),
+        ),
+        GoRoute(
+          path: '/novel/:id',
+          builder: (context, state) {
+            final novel = state.extra as Map<String, dynamic>;
+            return NovelDetailPage(novel: novel);
+          },
+        ),
+        GoRoute(
+          path: '/reader',
+          builder: (context, state) {
+            final pdfPath = state.extra as String;
+            return NovelReaderPage(pdfPath: pdfPath);
+          },
         ),
       ],
     ),
