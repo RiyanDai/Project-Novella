@@ -7,4 +7,6 @@ abstract class Routes {
   static const String library = "/library";
   static const String notification = "/notification";
   static const String bookDetail = "/bookDetail";
+  static const String novelDetail = "/novel/:id";
+  static const String reader = "/reader";
 }

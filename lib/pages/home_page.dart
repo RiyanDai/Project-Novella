@@ -58,8 +58,7 @@ class HomePage extends StatelessWidget {
                         title: novel['title'],
                         coverPath: novel['coverPath'],
                         onTap: () {
-                          // TODO: Navigate to novel detail page
-                          print('Tapped on ${novel['title']}');
+                          context.push('/novel/${novel.id}', extra: novel.data());
                         },
                       );
                     },
