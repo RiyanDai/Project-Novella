@@ -63,8 +63,13 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: Routes.reader,
           builder: (context, state) {
-            final pdfPath = state.extra as String;
-            return NovelReaderPage(pdfPath: pdfPath);
+            final params = state.extra as Map<String, dynamic>;
+            return NovelReaderPage(
+              pdfPath: params['pdfPath'] as String,
+              novelId: params['novelId'] as String,
+              title: params['title'] as String? ?? 'Untitled Novel',
+              initialPage: params['initialPage'] as int?? 0,
+            );
           },
         ),
       ],

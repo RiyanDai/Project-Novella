@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:novella_app/services/reading_progress_helper.dart';
 import 'dart:io';
 import 'package:novella_app/routing_tpl.dart';
 
@@ -10,6 +11,8 @@ class NovelDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String novelId = novel['id'] as String;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -76,19 +79,56 @@ class NovelDetailPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () {
-                        context.push(Routes.reader, extra: novel['pdfPath']);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        minimumSize: Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  FutureBuilder<Map<String, dynamic>?>(
+                    future: ReadingProgressHelper.instance.getProgress(novelId),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        final progress = snapshot.data!;
+                        return ElevatedButton(
+                          onPressed: () {
+                            context.push(
+                              Routes.reader,
+                              extra: {
+                                'pdfPath': novel['pdfPath'],
+                                'novelId': novelId,
+                                'initialPage': progress['current_page'],
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            minimumSize: Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Lanjutkan Membaca (Halaman ${progress['current_page'] + 1})', style: TextStyle(color: Colors.white) 
+                          ),
+                        );
+                      }
+                      return ElevatedButton(
+                        onPressed: () {
+                          context.push(
+                            Routes.reader,
+                            extra: {
+                              'pdfPath': novel['pdfPath'],
+                              'novelId': novelId,
+                              'initialPage': 0,
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          minimumSize: Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                    ),
-                    child: Text('Mulai Membaca'),
-                    ),
+                        child: Text('Mulai Membaca', style: TextStyle(color: Colors.white),),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

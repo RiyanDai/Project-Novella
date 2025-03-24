@@ -58,7 +58,10 @@ class HomePage extends StatelessWidget {
                         title: novel['title'],
                         coverPath: novel['coverPath'],
                         onTap: () {
-                          context.push('/novel/${novel.id}', extra: novel.data());
+                          context.push('/novel/${novel.id}', extra: {
+                            ...novel.data() as Map<String, dynamic>,
+                            'id': novel.id,
+                          });
                         },
                       );
                     },
