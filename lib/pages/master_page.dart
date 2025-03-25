@@ -73,15 +73,12 @@ class _MasterPageState extends State<MasterPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Perpustakaan',
+            'Novella',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.black,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {},
-            ),
+           
             IconButton(
               icon: const Icon(Icons.more_vert),
               onPressed: () {},

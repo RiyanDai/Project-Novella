@@ -55,70 +55,48 @@ class NotificationPage extends StatelessWidget {
                         .doc(progress['novel_id'])
                         .get(),
                     builder: (context, novelSnapshot) {
-                      if (!novelSnapshot.hasData || !novelSnapshot.data!.exists) {
-                        return Card(
-                          color: Colors.grey[900],
-                          margin: EdgeInsets.symmetric(vertical: 8),
-                          child: ListTile(
-                            leading: Icon(Icons.book, color: Colors.blue),
-                            title: Text(
-                              progress['title']?.toString() ?? 'Untitled Novel',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              'Halaman ${progress['current_page'] + 1} dari ${progress['total_pages']} • ${_getTimeAgo(DateTime.parse(progress['last_read']))}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            trailing: SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: CircularProgressIndicator(
-                                value: progress['current_page'] / progress['total_pages'],
-                                backgroundColor: Colors.grey[800],
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
+                      // Pastikan nilai yang digunakan valid
+                      final currentPage = progress['current_page'] as int? ?? 0;
+                      final totalPages = progress['total_pages'] as int? ?? 1;
+                      final progressValue = totalPages > 0 ? currentPage / totalPages : 0.0;
 
-                      final novel = novelSnapshot.data!.data() as Map<String, dynamic>;
-                      if (novel == null) return SizedBox();
-
-                      final DateTime lastRead = DateTime.parse(progress['last_read']);
-                      final timeAgo = _getTimeAgo(lastRead);
+                      // Ambil data novel dari Firestore
+                      final novel = novelSnapshot.data?.data() as Map<String, dynamic>?;
+                      final title = novel?['title'] ?? progress['title'] ?? 'Untitled Novel';
 
                       return Card(
                         color: Colors.grey[900],
                         margin: EdgeInsets.symmetric(vertical: 8),
                         child: ListTile(
-                          leading: Container(
-                            width: 40,
-                            height: 60,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: Image.file(
-                                File(novel['coverPath']),
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(Icons.book, color: Colors.blue);
-                                },
-                              ),
-                            ),
-                          ),
+                          leading: novel != null && novel['coverPath'] != null
+                              ? Container(
+                                  width: 40,
+                                  height: 60,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: Image.file(
+                                      File(novel['coverPath']),
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Icon(Icons.book, color: Colors.blue);
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : Icon(Icons.book, color: Colors.blue),
                           title: Text(
-                            novel['title'] ?? 'Novel tidak tersedia',
+                            title,
                             style: TextStyle(color: Colors.white),
                           ),
                           subtitle: Text(
-                            'Halaman ${progress['current_page'] + 1} dari ${progress['total_pages']} • $timeAgo',
+                            'Halaman ${currentPage + 1} dari $totalPages • ${_getTimeAgo(DateTime.parse(progress['last_read'] ?? DateTime.now().toIso8601String()))}',
                             style: TextStyle(color: Colors.grey),
                           ),
                           trailing: SizedBox(
                             width: 40,
                             height: 40,
                             child: CircularProgressIndicator(
-                              value: progress['current_page'] / progress['total_pages'],
+                              value: progressValue.clamp(0.0, 1.0),
                               backgroundColor: Colors.grey[800],
                               valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                             ),
