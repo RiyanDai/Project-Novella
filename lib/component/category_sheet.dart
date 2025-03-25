@@ -29,77 +29,49 @@ class CategorySheet {
 
   static final Map<String, bool> selectedCategories = {for (var category in categories) category: false};
 
-  static void show(BuildContext context, TextEditingController searchController, Function setStateCallback) {
-    showGeneralDialog(
+  static Future<String?> show(BuildContext context) async {
+    final List<String> genres = [
+      'Romance', 'Fantasy', 'Sci-Fi', 'Mystery', 'Horror',
+      'Action', 'Drama', 'Comedy', 'Slice of Life', 'Historical',
+    ];
+
+    return showModalBottomSheet<String>(
       context: context,
-      barrierLabel: "Kategori",
-      barrierDismissible: true,
-      transitionDuration: const Duration(milliseconds: 600),
-      transitionBuilder: _buildNewTransition,
-      pageBuilder: (context, anim1, anim2) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return Align(
-              alignment: Alignment.topCenter,
-              child: Material(
-                color: Colors.grey[900],
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 8, left: 8, top: 20),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Telusuri cerita, profil, atau daftar bacaan',
-                          hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                          filled: true,
-                          fillColor: Colors.grey[850],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[900],
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Wrap(
-                        spacing: 8.0,
-                        runSpacing: 8.0,
-                        children: categories.map((category) {
-                          return FilterChip(
-                            label: Text(category),
-                            selected: selectedCategories[category] ?? false,
-                            onSelected: (bool selected) {
-                              setDialogState(() {
-                                selectedCategories[category] = selected;
-                              });
-                              setStateCallback(() {});
-                            },
-                            backgroundColor: Colors.grey[800],
-                            selectedColor: Colors.orange,
-                            labelStyle: const TextStyle(color: Colors.white),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
+      backgroundColor: Colors.grey[900],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Pilih Kategori',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            );
-          },
+            ),
+            Divider(color: Colors.grey[800]),
+            Expanded(
+              child: ListView.builder(
+                itemCount: genres.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      genres[index],
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () => Navigator.pop(context, genres[index]),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );
