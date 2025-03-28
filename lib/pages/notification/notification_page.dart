@@ -11,116 +11,9 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Notifikasi'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          // Progress Membaca Section
-          Text(
-            'Progress Membaca',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: ReadingProgressHelper.instance.getRecentlyRead(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Center(
-                    child: Text(
-                      'Belum ada riwayat membaca',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                );
-              }
-
-              return Column(
-                children: snapshot.data!.map((progress) {
-                  return FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance
-                        .collection('novels')
-                        .doc(progress['novel_id'])
-                        .get(),
-                    builder: (context, novelSnapshot) {
-                      // Pastikan nilai yang digunakan valid
-                      final currentPage = progress['current_page'] as int? ?? 0;
-                      final totalPages = progress['total_pages'] as int? ?? 1;
-                      final progressValue = totalPages > 0 ? currentPage / totalPages : 0.0;
-
-                      // Ambil data novel dari Firestore
-                      final novel = novelSnapshot.data?.data() as Map<String, dynamic>?;
-                      final title = novel?['title'] ?? progress['title'] ?? 'Untitled Novel';
-
-                      return Card(
-                        color: Colors.grey[900],
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: ListTile(
-                          leading: novel != null && novel['coverPath'] != null
-                              ? Container(
-                                  width: 40,
-                                  height: 60,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(4),
-                                    child: Image.file(
-                                      File(novel['coverPath']),
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Icon(Icons.book, color: Colors.blue);
-                                      },
-                                    ),
-                                  ),
-                                )
-                              : Icon(Icons.book, color: Colors.blue),
-                          title: Text(
-                            title,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          subtitle: Text(
-                            'Halaman ${currentPage + 1} dari $totalPages • ${_getTimeAgo(DateTime.parse(progress['last_read'] ?? DateTime.now().toIso8601String()))}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          trailing: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: CircularProgressIndicator(
-                              value: progressValue.clamp(0.0, 1.0),
-                              backgroundColor: Colors.grey[800],
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                            ),
-                          ),
-                          onTap: () {
-                            if (novel != null) {
-                              context.push('/novel/${progress['novel_id']}', extra: {
-                                ...novel,
-                                'id': progress['novel_id'],
-                              });
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-              );
-            },
-          ),
-
-          SizedBox(height: 24),
-
-          // Update Terbaru Section
           Text(
             'Update Terbaru',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -193,7 +86,6 @@ class NotificationPage extends StatelessWidget {
 
           SizedBox(height: 24),
 
-          // Rekomendasi Section
           Text(
             'Rekomendasi Untukmu',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(

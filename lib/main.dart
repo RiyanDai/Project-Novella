@@ -22,8 +22,11 @@ void main() async {
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 final GoRouter _router = GoRouter(
   navigatorKey: _rootNavigatorKey,
+  observers: [routeObserver],
   routes: <RouteBase>[
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:flutter/foundation.dart';
 
 class ReadingProgressHelper {
   static final ReadingProgressHelper instance = ReadingProgressHelper._init();
   static Database? _database;
+  final _progressController = StreamController<List<Map<String, dynamic>>>.broadcast();
 
   ReadingProgressHelper._init();
 
@@ -86,6 +90,9 @@ class ReadingProgressHelper {
         whereArgs: [novelId],
       );
     }
+    
+    // Update the stream after saving
+    _updateProgress();
   }
 
   Future<Map<String, dynamic>?> getProgress(String novelId) async {
@@ -124,6 +131,9 @@ class ReadingProgressHelper {
       where: 'novel_id = ?',
       whereArgs: [novelId],
     );
+    
+    // Update the stream after deleting
+    _updateProgress();
   }
 
   Future<int> getReadingCount() async {
@@ -157,5 +167,23 @@ class ReadingProgressHelper {
       where: 'novel_id = ?',
       whereArgs: [novelId],
     );
+    
+    // Update the stream after updating
+    _updateProgress();
+  }
+
+  Stream<List<Map<String, dynamic>>> watchReadingProgress() {
+    _updateProgress(); // Load initial data
+    return _progressController.stream;
+  }
+
+  Future<void> _updateProgress() async {
+    final progress = await getAllProgress();
+    _progressController.add(progress);
+  }
+
+  @override
+  void dispose() {
+    _progressController.close();
   }
 } 
