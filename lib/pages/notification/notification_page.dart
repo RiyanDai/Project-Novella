@@ -24,7 +24,7 @@ class NotificationPage extends StatelessWidget {
           SizedBox(height: 8),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('novels')
+                .collection('notifications')
                 .orderBy('createdAt', descending: true)
                 .limit(5)
                 .snapshots(),
@@ -47,36 +47,58 @@ class NotificationPage extends StatelessWidget {
 
               return Column(
                 children: snapshot.data!.docs.map((doc) {
-                  final novel = doc.data() as Map<String, dynamic>;
-                  final createdAt = (novel['createdAt'] as Timestamp).toDate();
+                  final notification = doc.data() as Map<String, dynamic>;
+                  final createdAt = (notification['createdAt'] as Timestamp).toDate();
                   final timeAgo = _getTimeAgo(createdAt);
 
-                  return Card(
-                    color: Colors.grey[900],
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.new_releases,
-                        color: Colors.orange,
+                  return Dismissible(
+                    key: Key(doc.id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.red[400],
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      title: Text(
-                        'Novel Baru Ditambahkan',
-                        style: TextStyle(color: Colors.white),
+                      child: Icon(
+                        Icons.delete_forever_rounded,
+                        color: Colors.white,
+                        size: 28,
                       ),
-                      subtitle: Text(
-                        novel['title'],
-                        style: TextStyle(color: Colors.grey),
+                    ),
+                    onDismissed: (direction) {
+                      FirebaseFirestore.instance
+                          .collection('notifications')
+                          .doc(doc.id)
+                          .delete();
+                    },
+                    child: Card(
+                      color: Colors.grey[900],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.new_releases,
+                          color: Colors.orange,
+                        ),
+                        title: Text(
+                          'Novel Baru Ditambahkan',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        subtitle: Text(
+                          notification['novelTitle'],
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        trailing: Text(
+                          timeAgo,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        onTap: () {
+                          context.push('/novel/${notification['novelId']}', extra: {
+                            'id': notification['novelId'],
+                          });
+                        },
                       ),
-                      trailing: Text(
-                        timeAgo,
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      onTap: () {
-                        context.push('/novel/${doc.id}', extra: {
-                          ...novel,
-                          'id': doc.id,
-                        });
-                      },
                     ),
                   );
                 }).toList(),

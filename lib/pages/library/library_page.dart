@@ -110,7 +110,28 @@ class _LibraryPageState extends State<LibraryPage> {
                             return _buildProgressCard(progress, null);
                           }
                           final novel = novelSnapshot.data?.data() as Map<String, dynamic>?;
-                          return _buildProgressCard(progress, novel);
+                          return Dismissible(
+                            key: Key(progress['novel_id']),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.red[400],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.delete_forever_rounded,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                            ),
+                            onDismissed: (direction) async {
+                              // Delete reading progress using existing helper method
+                              await _progressHelper.deleteProgress(progress['novel_id']);
+                            },
+                            child: _buildProgressCard(progress, novel),
+                          );
                         },
                       );
                     },
