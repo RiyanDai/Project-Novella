@@ -14,8 +14,7 @@ class FirestoreService {
     required String pdfPath,
   }) async {
     try {
-      // Add novel
-      final docRef = await novels.add({
+      await novels.add({
         'title': title,
         'author': author,
         'synopsis': synopsis,
@@ -26,13 +25,6 @@ class FirestoreService {
         'views': 0,
         'likes': 0,
         'status': 'published',
-      });
-
-      // Add notification
-      await FirebaseFirestore.instance.collection('notifications').add({
-        'novelId': docRef.id,
-        'novelTitle': title,
-        'createdAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
       print('Error adding novel: $e');
