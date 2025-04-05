@@ -39,5 +39,7 @@ Novella adalah aplikasi membaca novel digital seperti Wattpad, dibangun dengan F
 1. Clone repositori ini:
 
    ```bash
-   git clone https://github.com/username/novella_app.git
+   git clone https://g...
    cd novella_app
+
+## INI PRIVATE REPO DAH, GABISA ASAL CLONE WKWK
