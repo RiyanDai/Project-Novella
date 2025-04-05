@@ -12,6 +12,7 @@ import 'package:novella_app/pages/notification/notification_page.dart';
 import 'package:novella_app/pages/search/search_page.dart';
 import 'package:novella_app/pages/writing/writing_or_upload.dart';
 import 'package:novella_app/routing_tpl.dart';
+import 'package:novella_app/pages/splash_screen.dart';
 
 
 void main() async {
@@ -27,7 +28,12 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GoRouter _router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   observers: [routeObserver],
+  initialLocation: '/splash',
   routes: <RouteBase>[
+    GoRoute(
+      path: '/splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
       builder: (context, state, child) => MasterPage(child: child),
