@@ -1,16 +1,43 @@
-# novella_app
+# 📚 Novella – A Flutter Novel Reader App
 
-A new Flutter project.
+Novella adalah aplikasi membaca novel digital seperti Wattpad, dibangun dengan Flutter. Aplikasi ini mendukung pembacaan EPUB dan PDF, manajemen perpustakaan lokal, fitur pencarian novel, notifikasi, dan sistem menulis atau unggah karya.
 
-## Getting Started
+> 📱 Dibangun dengan Flutter + Firebase + SQLite + EPUB & PDF Rendering
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Fitur Unggulan
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 🏠 **Beranda dinamis** dengan daftar novel populer
+- 🔍 **Pencarian cepat** untuk menemukan novel
+- 📚 **Perpustakaan pribadi** yang tersimpan secara lokal
+- ✍️ **Mode Menulis / Unggah** untuk menambah konten sendiri
+- 📖 **Reader EPUB dan PDF** langsung dalam aplikasi
+- 🔔 **Notifikasi** untuk update novel
+- 🌙 **Tampilan gelap** modern untuk pengalaman membaca malam hari
+- 💦 **Watermark transparan** untuk branding elegan
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🧑‍💻 Teknologi yang Digunakan
+
+| Teknologi         | Deskripsi                         |
+|------------------|----------------------------------|
+| Flutter          | Framework UI utama               |
+| GoRouter         | Navigasi modern berbasis URL     |
+| Firebase         | Backend & Notifikasi             |
+| SQLite           | Penyimpanan lokal untuk novel    |
+| epub_view        | Membaca file EPUB                |
+| flutter_pdfview  | Membaca file PDF                 |
+| share_plus       | Berbagi novel                    |
+| file_picker      | Memilih file untuk diunggah      |
+
+---
+
+## 🚀 Instalasi & Menjalankan
+
+1. Clone repositori ini:
+
+   ```bash
+   git clone https://github.com/username/novella_app.git
+   cd novella_app
