@@ -151,6 +151,7 @@ class _LibraryPageState extends State<LibraryPage> {
     final totalPages = progress['total_pages'] as int;
     final progressValue = totalPages > 0 ? currentPage / totalPages : 0.0;
     final lastRead = DateTime.parse(progress['last_read']);
+    final rating = novel?['rating']?.toDouble() ?? 0.0;
 
     return Card(
       margin: EdgeInsets.only(bottom: 16),
@@ -173,36 +174,75 @@ class _LibraryPageState extends State<LibraryPage> {
           child: Row(
             children: [
               // Cover Image
-              Container(
-                width: 80,
-                height: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: novel != null && novel['coverPath'] != null
-                      ? Image.file(
-                          File(novel['coverPath']),
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                                color: Colors.grey[800],
-                                child: Icon(Icons.book, color: Colors.white),
-                              ),
-                        )
-                      : Container(
-                          color: Colors.grey[800],
-                          child: Icon(Icons.book, color: Colors.white),
+              Stack(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
                         ),
-                ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: novel != null && novel['coverPath'] != null
+                          ? Image.file(
+                              File(novel['coverPath']),
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    color: Colors.grey[800],
+                                    child: Icon(Icons.book, color: Colors.white),
+                                  ),
+                            )
+                          : Container(
+                              color: Colors.grey[800],
+                              child: Icon(Icons.book, color: Colors.white),
+                            ),
+                    ),
+                  ),
+                  if (rating > 0)
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 14,
+                            ),
+                            SizedBox(width: 2),
+                            Text(
+                              rating.toStringAsFixed(1),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
               SizedBox(width: 16),
               // Book Info

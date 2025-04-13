@@ -25,6 +25,8 @@ class FirestoreService {
         'views': 0,
         'likes': 0,
         'status': 'published',
+        'rating': 0.0,
+        'ratingCount': 0,
       });
     } catch (e) {
       print('Error adding novel: $e');
@@ -133,6 +135,33 @@ class FirestoreService {
       });
     } catch (e) {
       print('Error toggling like: $e');
+    }
+  }
+
+  // Rate a novel
+  Future<void> rateNovel(String docId, double rating) async {
+    try {
+      // Get the current novel data
+      final doc = await novels.doc(docId).get();
+      if (doc.exists) {
+        final data = doc.data() as Map<String, dynamic>;
+        
+        // Calculate new average rating
+        final currentRating = data['rating'] ?? 0.0;
+        final currentCount = data['ratingCount'] ?? 0;
+        
+        final newCount = currentCount + 1;
+        final newRating = ((currentRating * currentCount) + rating) / newCount;
+        
+        // Update the document with new rating
+        await novels.doc(docId).update({
+          'rating': newRating,
+          'ratingCount': newCount,
+        });
+      }
+    } catch (e) {
+      print('Error rating novel: $e');
+      throw Exception('Failed to rate novel');
     }
   }
 }

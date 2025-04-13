@@ -50,10 +50,13 @@ class HomePage extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       final novel = snapshot.data!.docs[index];
+                      final novelData = novel.data() as Map<String, dynamic>;
                       return NovelCard(
                         title: novel['title'],
                         coverPath: novel['coverPath'],
                         novelId: novel.id,
+                        rating: novelData['rating']?.toDouble() ?? 0.0,
+                        ratingCount: novelData['ratingCount'] ?? 0,
                         onTap: () {
                           context.push('/novel/${novel.id}', extra: {
                             ...novel.data() as Map<String, dynamic>,
@@ -78,12 +81,16 @@ class NovelCard extends StatelessWidget {
   final String coverPath;
   final VoidCallback onTap;
   final String novelId;
+  final double rating;
+  final int ratingCount;
 
   const NovelCard({
     required this.title,
     required this.coverPath,
     required this.onTap,
     required this.novelId,
+    required this.rating,
+    required this.ratingCount,
   });
 
   @override
@@ -129,6 +136,36 @@ class NovelCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (rating > 0)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 14,
+                            ),
+                            SizedBox(width: 2),
+                            Text(
+                              '${rating.toStringAsFixed(1)}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
